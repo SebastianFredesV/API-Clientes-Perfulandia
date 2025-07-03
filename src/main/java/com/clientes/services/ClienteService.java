@@ -1,10 +1,14 @@
 package com.clientes.services;
 
+import com.clientes.controllers.ClienteController;
 import com.clientes.dto.ClienteDTO;
 import com.clientes.models.Cliente;
 import com.clientes.repository.ClienteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -61,6 +65,11 @@ public class ClienteService {
         dto.setRut(cliente.getRut());
         dto.setDireccion(cliente.getDireccion());
         dto.setTelefono(cliente.getTelefono());
+
+        // HATEOAS
+        dto.add(linkTo(methodOn(ClienteController.class).obtener(cliente.getIdCliente())).withSelfRel());
+        dto.add(linkTo(methodOn(ClienteController.class).listar()).withRel("Todos"));
+
         return dto;
     }
 
